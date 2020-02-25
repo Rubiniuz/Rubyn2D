@@ -74,13 +74,13 @@ add_library(common # ar rcs libcommon.a
 	common/renderer.cpp
 	common/sprite.h
 	common/sprite.cpp
+	common/core.h
+	common/core.cpp
 )
 
 # Demo
 add_executable(demo # g++ demo/main.cpp -o demo
 	demo/main.cpp
-	demo/core.cpp
-	demo/core.h
 	demo/network.cpp
 	demo/network.h
 	demo/spacewar.cpp

@@ -1,4 +1,4 @@
-#include "core.h"
+#include <common/core.h>
 #include "network.h"
 #include "spacewar.h"
 
