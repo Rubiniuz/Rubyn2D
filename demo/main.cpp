@@ -4,10 +4,12 @@
 
 int main()
 {
-  Core* core = new Core();
+  Core core;
   //Network* network = new Network();
 
-  core->CreateWindow();
+  core.CreateWindow();
+
+  Scene test;
 
   sf::RectangleShape rect;
   rect.setSize(sf::Vector2f(200.f, 300.f));
@@ -16,12 +18,17 @@ int main()
   rect.setPosition(playerpos);
   rect.setFillColor(sf::Color::Blue);
 
+  test.AddShape(&rect);
+
+  core.AddScene(&test);
+
+  core.Start();
+
   sf::Event event;
 
-  while(core->isRunning)
+  while(core.isRunning)
   {
-    core->Run();
-    event = core->GetEventHandler();
+    event = core.GetEventHandler();
     switch(event.type)
     {
       case sf::Event::KeyPressed:
@@ -46,8 +53,8 @@ int main()
         break;
     }
     rect.setPosition(playerpos);
-    core->Clear();
-    core->Render(&rect);
+    core.Run();
   }
+
   return 0;
 }

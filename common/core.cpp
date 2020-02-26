@@ -21,7 +21,25 @@ void Core::CreateWindow()
   isRunning = true;
 }
 
+void Core::Start()
+{
+  if(scenes[0] != nullptr)
+  {
+    currentScene = scenes[0];
+  }
+}
+
 void Core::Run()
+{
+  CheckWindowState();
+  Clear();
+  for (size_t i = 0; i < currentScene->Shapes().size(); i++) {
+    Render(currentScene->Shapes()[i]);
+  }
+
+}
+
+void Core::CheckWindowState()
 {
   if (window.isOpen())
   {

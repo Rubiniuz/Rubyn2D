@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <SFML/Graphics.hpp>
+#include <common/scene.h>
 
 class Core
 {
@@ -11,6 +12,8 @@ public:
   ~Core();
 
   void CreateWindow();
+
+  void Start();
 
   void Run();
 
@@ -22,11 +25,18 @@ public:
 
   sf::Event GetEventHandler() { return eventHandler; };
 
+  void AddScene(Scene* toAdd) { scenes.push_back(toAdd); };
+
 private:
+
+  void CheckWindowState();
 
   sf::RenderWindow window;
   sf::VideoMode currentMode;
   sf::Event eventHandler;
+
+  std::vector<Scene*> scenes;
+  Scene* currentScene;
 
 };
 
