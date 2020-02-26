@@ -4,8 +4,6 @@
 #include <vector>
 #include <SFML/Graphics.hpp>
 
-#include <common/sprite.h>
-
 class Scene
 {
 public:
@@ -19,7 +17,6 @@ public:
 
 private:
 
-  std::vector<Sprite*> sprites;
   std::vector<sf::Shape*> shapes;
 
 
