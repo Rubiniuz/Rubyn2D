@@ -78,6 +78,8 @@ add_library(common # ar rcs libcommon.a
 	common/core.cpp
 	common/scene.h
 	common/scene.cpp
+	common/entity.h
+	common/entity.cpp
 )
 
 # Demo
