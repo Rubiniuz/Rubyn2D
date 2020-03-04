@@ -11,14 +11,16 @@ int main()
 
   Scene test;
 
-  sf::RectangleShape rect;
-  rect.setSize(sf::Vector2f(200.f, 300.f));
   sf::Vector2f playerpos = sf::Vector2f(150.0f, 150.0f);
 
-  rect.setPosition(playerpos);
-  rect.setFillColor(sf::Color::Blue);
+  Entity ent;
 
-  test.AddShape(&rect);
+  ent.LoadFromFile("assets/Player.png");
+  ent.Init();
+  ent.SetColor(80,146,222,255);
+  ent.SetPosition(playerpos);
+
+  test.AddEntity(&ent);
 
   core.AddScene(&test);
 
@@ -52,7 +54,7 @@ int main()
       default:
         break;
     }
-    rect.setPosition(playerpos);
+    ent.SetPosition(playerpos);
     core.Run();
   }
 

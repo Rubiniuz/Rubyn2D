@@ -4,6 +4,8 @@
 #include <vector>
 #include <SFML/Graphics.hpp>
 
+#include <common/entity.h>
+
 class Scene
 {
 public:
@@ -11,14 +13,13 @@ public:
   Scene();
   ~Scene();
 
-  std::vector<sf::Shape*> Shapes() { return shapes; };
+  std::vector<Entity*> Entities() { return entities; };
 
-  void AddShape(sf::Shape* shape) { shapes.push_back(shape); };
+  void AddEntity(Entity* entity) { entities.push_back(entity); };
 
 private:
 
-  std::vector<sf::Shape*> shapes;
-
+  std::vector<Entity*> entities;
 
 };
 

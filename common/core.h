@@ -4,6 +4,7 @@
 #include <iostream>
 #include <SFML/Graphics.hpp>
 #include <common/scene.h>
+#include <common/entity.h>
 
 class Core
 {
@@ -17,7 +18,7 @@ public:
 
   void Run();
 
-  void Render(sf::Shape* toRender);
+  void Render(sf::Drawable* toRender);
 
   void Clear();
 

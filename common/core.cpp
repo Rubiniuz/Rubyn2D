@@ -32,11 +32,11 @@ void Core::Start()
 void Core::Run()
 {
   CheckWindowState();
-  Clear();
-  for (size_t i = 0; i < currentScene->Shapes().size(); i++) {
-    Render(currentScene->Shapes()[i]);
+  window.clear(sf::Color::White);
+  for (size_t i = 0; i < currentScene->Entities().size(); i++) {
+    currentScene->Entities()[i]->Draw(window, sf::RenderStates::Default);
   }
-
+  window.display();
 }
 
 void Core::CheckWindowState()
@@ -93,7 +93,7 @@ void Core::Clear()
   window.clear(sf::Color::Black);
 }
 
-void Core::Render(sf::Shape* toRender)
+void Core::Render(sf::Drawable* toRender)
 {
   window.draw(*toRender);
   window.display();
