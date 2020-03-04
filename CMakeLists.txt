@@ -95,10 +95,28 @@ target_link_libraries(demo # g++ -lcommon
 	${ALL_GRAPHICS_LIBS}
 )
 
+# Networking
+add_executable(networking # g++ networking/main.cpp -o networking
+	networking/main.cpp
+	networking/client.cpp
+	networking/client.h
+	networking/server.cpp
+	networking/server.h
+)
+
+target_link_libraries(networking # g++ -lcommon
+	common
+	${ALL_GRAPHICS_LIBS}
+)
+
 # Copy assets and shaders to the build directory
 # (In Visual Studio, copy these directories to either 'Release' or 'Build')
 file(
 	COPY demo/assets
+	DESTINATION ${CMAKE_BINARY_DIR}
+)
+file(
+	COPY networking/assets
 	DESTINATION ${CMAKE_BINARY_DIR}
 )
 file(
