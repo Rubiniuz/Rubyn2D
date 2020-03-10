@@ -22,6 +22,8 @@ public:
 
   void Clear();
 
+  void Draw(Entity* entity);
+
   bool isRunning;
 
   sf::Event GetEventHandler() { return eventHandler; };

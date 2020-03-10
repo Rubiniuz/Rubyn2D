@@ -6,20 +6,18 @@
 
 #include <common/entity.h>
 
-class Scene
+class Scene : public Entity
 {
 public:
 
   Scene();
   ~Scene();
 
-  std::vector<Entity*> Entities() { return entities; };
-
-  void AddEntity(Entity* entity) { entities.push_back(entity); };
-
 private:
 
-  std::vector<Entity*> entities;
+  Entity* bgLayer;
+  Entity* entLayer;
+  Entity* uiLayer;
 
 };
 

@@ -33,10 +33,19 @@ void Core::Run()
 {
   CheckWindowState();
   window.clear(sf::Color::White);
-  for (size_t i = 0; i < currentScene->Entities().size(); i++) {
-    currentScene->Entities()[i]->Draw(window, sf::RenderStates::Default);
-  }
+  Draw(currentScene);
   window.display();
+}
+
+void Core::Draw(Entity* entity)
+{
+  entity->Draw(window, sf::RenderStates::Default);
+  // Render all Children (recursively)
+	std::vector<Entity*> children = entity->Children();
+	std::vector<Entity*>::iterator child;
+	for (child = children.begin(); child != children.end(); child++) {
+		this->Draw(*child);
+	}
 }
 
 void Core::CheckWindowState()

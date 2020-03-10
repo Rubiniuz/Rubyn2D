@@ -6,7 +6,7 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
 
-class Entity : public sf::Drawable, sf::Transformable
+class Entity : public sf::Drawable, public sf::Transformable
 {
 public:
 
@@ -29,6 +29,20 @@ public:
   void SetRotation(float rotation);
   void SetScale(sf::Vector2f scaling);
 
+  sf::Vector2f Position() { return sf::Vector2f(_position.x,_position.y); };
+  float Rotation() { return getRotation(); };
+  sf::Vector2f Scale() { return sf::Vector2f(_scale.x,_scale.y); };
+
+  Entity* Parent() { return parent; };
+  int GlobalID() { return globalID; };
+
+  std::vector<Entity*> Children() { return children; };
+
+  void AddChild(Entity* child);
+  void RemoveChild(Entity* child);
+
+  Entity* GetChild(unsigned int i);
+
   sf::Vector2f Point1,Point2;
   sf::Color Colour;
 
@@ -45,6 +59,13 @@ private:
   glm::vec3 _position;
   glm::vec3 _scale;
   glm::vec3 _rotation;
+
+  std::vector<Entity*> children;
+
+  int globalID;
+  static int nextGlobalID;
+
+  Entity* parent;
 
 };
 
