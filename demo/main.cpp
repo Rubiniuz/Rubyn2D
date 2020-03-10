@@ -20,7 +20,7 @@ int main()
   ent.SetColor(80,146,222,255);
   ent.SetPosition(playerpos);
 
-  test.AddEntity(&ent);
+  test.AddChild(&ent);
 
   core.AddScene(&test);
 
