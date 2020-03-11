@@ -45,7 +45,6 @@ add_definitions( # g++ -Dxxx
 add_subdirectory (external)
 
 include_directories( # g++ -Ipath/to/headerfiles
-	external/glfw-3.3/include/
 	external/glm-0.9.9.2/
 	external/glew-1.9.0/include/
 	external/SFML-2.5.1/include/
@@ -58,7 +57,6 @@ link_directories( # g++ -Lpath/to/library
 
 set(ALL_GRAPHICS_LIBS
 	${OPENGL_LIBRARY}
-	glfw
 	GLEW_190
 	sfml-graphics
 	sfml-window
@@ -68,12 +66,6 @@ set(ALL_GRAPHICS_LIBS
 
 # Common (libcommon.a)
 add_library(common # ar rcs libcommon.a
-	common/camera.h
-	common/camera.cpp
-	common/renderer.h
-	common/renderer.cpp
-	common/sprite.h
-	common/sprite.cpp
 	common/core.h
 	common/core.cpp
 	common/scene.h
@@ -85,10 +77,6 @@ add_library(common # ar rcs libcommon.a
 # Demo
 add_executable(demo # g++ demo/main.cpp -o demo
 	demo/main.cpp
-	demo/network.cpp
-	demo/network.h
-	demo/spacewar.cpp
-	demo/spacewar.h
 )
 target_link_libraries(demo # g++ -lcommon
 	common
@@ -102,6 +90,10 @@ add_executable(networking # g++ networking/main.cpp -o networking
 	networking/client.h
 	networking/server.cpp
 	networking/server.h
+	networking/network.cpp
+	networking/network.h
+	networking/spacewar.cpp
+	networking/spacewar.h
 )
 
 target_link_libraries(networking # g++ -lcommon
