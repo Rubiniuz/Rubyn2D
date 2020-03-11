@@ -1,6 +1,4 @@
 #include <common/core.h>
-#include "network.h"
-#include "spacewar.h"
 
 int main()
 {
