@@ -1,46 +1,33 @@
-#include <common/core.h>
+#include <iostream>
+
+#include "server.h"
+#include "client.h"
 
 int main()
 {
-  Core core;
+  std::string inputString;
 
-  core.CreateWindow();
+  sf::IpAddress ip = sf::IpAddress::getLocalAddress();
 
-  Scene test;
+  char connectionType;
 
-  sf::Vector2f playerpos = sf::Vector2f(150.0f, 150.0f);
+  std::cout << "Enter (s) for Server, Enter (c) for client: " << std::endl;
+  std::cin >> connectionType;
 
-  Entity ent;
-
-  ent.LoadFromFile("assets/Player.png");
-  ent.Init();
-  ent.SetColor(80,146,222,255);
-  ent.SetPosition(playerpos);
-
-  test.AddEntity(&ent);
-
-  core.AddScene(&test);
-
-  core.Start();
-
-  sf::Event event;
-
-  while(core.isRunning)
+  if (connectionType == 's')
   {
-    event = core.GetEventHandler();
-    switch(event.type)
-    {
-      case sf::Event::KeyPressed:
-        if (event.key.code == sf::Keyboard::D)
-        {
-          playerpos.x += 5;
-        }
-        break;
-      default:
-        break;
-    }
-    ent.SetPosition(playerpos);
-    core.Run();
+    Server server;
+    server.mode = 's';
+    server.Start();
+    server.Run();
+  }
+  else if (connectionType == 'c')
+  {
+    Client client;
+    client.serverIp = ip;
+    client.mode = 'r';
+    client.Start();
+    client.Run();
   }
 
   return 0;
