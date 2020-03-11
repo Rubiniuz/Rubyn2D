@@ -8,6 +8,15 @@ Entity::Entity() : sf::Drawable(), sf::Transformable()
   nextGlobalID++;
 
   parent = nullptr;
+
+  globalPos = sf::Vector2f(0.0f,0.0f);
+  localPos = sf::Vector2f(0.0f,0.0f);
+
+  globalScale = sf::Vector2f(1.0f,1.0f);
+  localScale = sf::Vector2f(1.0f,1.0f);
+
+  globalRot = 0.0f;
+  localRot = 0.0f;
 }
 
 Entity::~Entity()
@@ -17,9 +26,25 @@ Entity::~Entity()
 
 void Entity::SetPosition(sf::Vector2f position)
 {
+  /*
   // position
   sprite.setPosition(position); // absolute position
   sprite.move(0.0f,0.0f); // offset relative to the current position
+  */
+  localPos = position;
+  globalPos = localPos;
+  sprite.setPosition(localPos);
+  if (parent != nullptr)
+  {
+    sprite.setPosition(parent->globalPos);
+    sprite.move(localPos);
+    globalPos = parent->globalPos + localPos;
+  }
+
+  std::vector<Entity*>::iterator child;
+	for (child = children.begin(); child != children.end(); child++) {
+		(*child)->SetPosition((*child)->localPos);
+	}
 }
 
 void Entity::SetRotation(float rotation)

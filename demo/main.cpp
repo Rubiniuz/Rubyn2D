@@ -9,7 +9,7 @@ int main()
 
   Scene test;
 
-  sf::Vector2f playerpos = sf::Vector2f(150.0f, 150.0f);
+  sf::Vector2f playerpos = sf::Vector2f(50.0f, 50.0f);
 
   Entity ent;
 
@@ -19,6 +19,24 @@ int main()
   ent.SetPosition(playerpos);
 
   test.AddChild(&ent);
+
+  Entity ent2;
+
+  ent2.LoadFromFile("assets/Player.png");
+  ent2.Init();
+  ent2.SetColor(80,146,222,255);
+  ent2.SetPosition(playerpos);
+
+  ent.AddChild(&ent2);
+
+  Entity ent3;
+
+  ent3.LoadFromFile("assets/Player.png");
+  ent3.Init();
+  ent3.SetColor(80,146,222,255);
+  ent3.SetPosition(playerpos);
+
+  ent2.AddChild(&ent3);
 
   core.AddScene(&test);
 

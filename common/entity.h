@@ -52,6 +52,10 @@ public:
   sf::Vector2f globalScale;
   float globalRot;
 
+  sf::Vector2f localPos;
+  sf::Vector2f localScale;
+  float localRot;
+
 private:
 
   virtual void draw(sf::RenderTarget& target,sf::RenderStates states)const;
