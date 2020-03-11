@@ -48,6 +48,10 @@ public:
 
   sf::Sprite sprite;
 
+  sf::Vector2f globalPos;
+  sf::Vector2f globalScale;
+  float globalRot;
+
 private:
 
   virtual void draw(sf::RenderTarget& target,sf::RenderStates states)const;
