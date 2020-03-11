@@ -56,9 +56,25 @@ void Entity::SetRotation(float rotation)
 
 void Entity::SetScale(sf::Vector2f scaling)
 {
+  /*
   // scale
   sprite.setScale(scaling); // absolute scale factor
   sprite.scale(sf::Vector2f(1.5f, 3.f)); // factor relative to the current scale
+  */
+  localScale = scaling;
+  globalScale = localScale;
+  sprite.setScale(localScale);
+  if (parent != nullptr)
+  {
+    sprite.setScale(parent->globalScale);
+    sprite.scale(localScale);
+    globalScale = sf::Vector2f(parent->globalScale.x * localScale.x, parent->globalScale.y * localScale.y);
+  }
+
+  std::vector<Entity*>::iterator child;
+	for (child = children.begin(); child != children.end(); child++) {
+		(*child)->SetScale((*child)->localScale);
+	}
 }
 
 void Entity::AddChild(Entity* child)

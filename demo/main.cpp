@@ -17,6 +17,7 @@ int main()
   ent.Init();
   ent.SetColor(80,146,222,255);
   ent.SetPosition(playerpos);
+  ent.SetScale(sf::Vector2f(1.0f,1.0f));
 
   test.AddChild(&ent);
 
@@ -26,6 +27,7 @@ int main()
   ent2.Init();
   ent2.SetColor(80,146,222,255);
   ent2.SetPosition(playerpos);
+  ent2.SetScale(sf::Vector2f(2.0f,2.0f));
 
   ent.AddChild(&ent2);
 
@@ -35,8 +37,11 @@ int main()
   ent3.Init();
   ent3.SetColor(80,146,222,255);
   ent3.SetPosition(playerpos);
+  ent3.SetScale(sf::Vector2f(1.0f,1.0f));
 
   ent2.AddChild(&ent3);
+
+  ent2.SetScale(sf::Vector2f(2.0f,2.0f));
 
   core.AddScene(&test);
 
