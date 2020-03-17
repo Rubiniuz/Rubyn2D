@@ -20,8 +20,8 @@ public:
   void SetColor(sf::Color color) { _color = color; };
   void SetColor(int r, int g, int b, int a) { _color = sf::Color(r,g,b,a); };
 
-  void LoadFromFile(std::string fromFile) { if (_texture.loadFromFile(fromFile)){ std::cout << "Loaded Texture: " << fromFile << std::endl; } };
-  void Init() { sprite.setTexture(_texture); std::cout << "Made a sprite from Texture." << std::endl; sprite.setOrigin(sf::Vector2f(25.f, 25.f)); sprite.setColor(sf::Color(255, 0, 0, 255));};
+  void LoadFromFile(std::string fromFile) ;
+  void Init();
 
   void Draw(sf::RenderTarget& target,sf::RenderStates states){draw(target,states);};
 
@@ -30,7 +30,7 @@ public:
   void SetScale(sf::Vector2f scaling);
 
   sf::Vector2f Position() { return sf::Vector2f(_position.x,_position.y); };
-  float Rotation() { return getRotation(); };
+  float Rotation() { return localRot; };
   sf::Vector2f Scale() { return sf::Vector2f(_scale.x,_scale.y); };
 
   Entity* Parent() { return parent; };

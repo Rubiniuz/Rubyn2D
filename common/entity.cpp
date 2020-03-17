@@ -112,6 +112,23 @@ Entity* Entity::GetChild(unsigned int i)
 	return nullptr;
 }
 
+
+void Entity::LoadFromFile(std::string fromFile)
+{
+  if (_texture.loadFromFile(fromFile))
+  {
+    std::cout << "Loaded Texture: " << fromFile << std::endl;
+  }
+}
+
+void Entity::Init()
+{
+  sprite.setTexture(_texture);
+  std::cout << "Made a sprite from Texture." << std::endl;
+  sprite.setOrigin(sf::Vector2f(_texture.getSize().x / 2, _texture.getSize().y / 2));
+  sprite.setColor(_color);
+}
+
 void Entity::draw(sf::RenderTarget& target,sf::RenderStates states)const
 {
   target.draw(sprite, states);
