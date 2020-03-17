@@ -21,11 +21,31 @@ void Core::CreateWindow()
   isRunning = true;
 }
 
+void Core::AddScene(std::string sceneName, Scene* toAdd)
+{
+  scenes[sceneName] = toAdd;
+}
+
+Scene* Core::GetScene(std::string sceneName)
+{
+  if (scenes[sceneName] != nullptr)
+  {
+    return scenes[sceneName];
+  }
+  std::cout << "This Scene does not exist" << std::endl;
+  return nullptr;
+}
+
+void Core::GoToScene(std::string sceneName)
+{
+  currentScene = GetScene(sceneName);
+}
+
 void Core::Start()
 {
-  if(scenes[0] != nullptr)
+  if(GetScene("Main") != nullptr)
   {
-    currentScene = scenes[0];
+    currentScene = scenes["Main"];
   }
 }
 

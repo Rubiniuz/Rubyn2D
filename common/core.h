@@ -28,7 +28,11 @@ public:
 
   sf::Event GetEventHandler() { return eventHandler; };
 
-  void AddScene(Scene* toAdd) { scenes.push_back(toAdd); };
+  void AddScene(std::string sceneName, Scene* toAdd);
+
+  Scene* GetScene(std::string sceneName);
+
+  void GoToScene(std::string sceneName);
 
 private:
 
@@ -38,7 +42,7 @@ private:
   sf::VideoMode currentMode;
   sf::Event eventHandler;
 
-  std::vector<Scene*> scenes;
+  std::map<std::string, Scene*> scenes;
   Scene* currentScene;
 
 };

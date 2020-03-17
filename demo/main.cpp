@@ -8,6 +8,7 @@ int main()
   core.CreateWindow();
 
   Scene test;
+  Scene* test = new Scene();
 
   sf::Vector2f playerpos = sf::Vector2f(50.0f, 50.0f);
 
@@ -44,6 +45,7 @@ int main()
   ent2.SetScale(sf::Vector2f(2.0f,2.0f));
 
   core.AddScene(&test);
+  core.AddScene("Main", test);
 
   core.Start();
 
