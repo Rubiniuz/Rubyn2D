@@ -13,6 +13,10 @@ public:
   Scene();
   ~Scene();
 
+  virtual void Update(sf::Event event);
+
+  std::vector<Entity*> layers;
+
 private:
 
   Entity* bgLayer;
