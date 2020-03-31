@@ -49,8 +49,9 @@ void Core::Start()
   }
 }
 
-void Core::Run()
+void Core::Run(sf::Event event)
 {
+  currentScene->Update(event);
   CheckWindowState();
   window.clear(sf::Color::White);
   Draw(currentScene);

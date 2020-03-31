@@ -16,7 +16,7 @@ public:
 
   void Start();
 
-  void Run();
+  void Run(sf::Event event);
 
   void Render(sf::Drawable* toRender);
 
