@@ -43,10 +43,11 @@ void Core::GoToScene(std::string sceneName)
 
 void Core::Start()
 {
-  if(GetScene("Main") != nullptr)
+  currentScene = scenes["Game"];
+  /*if(GetScene("Main") != nullptr)
   {
     currentScene = scenes["Main"];
-  }
+  }*/
 }
 
 void Core::Run(sf::Event event)
@@ -60,13 +61,13 @@ void Core::Run(sf::Event event)
 
 void Core::Draw(Entity* entity)
 {
-  entity->Draw(window, sf::RenderStates::Default);
+  entity->Draw(window, sf::Transform::Identity);
   // Render all Children (recursively)
-	std::vector<Entity*> children = entity->Children();
+	/*std::vector<Entity*> children = entity->Children();
 	std::vector<Entity*>::iterator child;
 	for (child = children.begin(); child != children.end(); child++) {
 		this->Draw(*child);
-	}
+	}*/
 }
 
 void Core::CheckWindowState()

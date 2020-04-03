@@ -6,7 +6,7 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
 
-class Entity : public sf::Drawable, public sf::Transformable
+class Entity : public sf::Transformable
 {
 public:
 
@@ -23,15 +23,15 @@ public:
   void LoadFromFile(std::string fromFile) ;
   void Init();
 
-  void Draw(sf::RenderTarget& target,sf::RenderStates states){draw(target,states);};
+  void Draw(sf::RenderTarget& target,sf::Transform transform){draw(target,transform);};
 
   void SetPosition(sf::Vector2f position);
   void SetRotation(float rotation);
   void SetScale(sf::Vector2f scaling);
 
-  sf::Vector2f Position() { return sf::Vector2f(_position.x,_position.y); };
-  float Rotation() { return localRot; };
-  sf::Vector2f Scale() { return sf::Vector2f(_scale.x,_scale.y); };
+  sf::Vector2f Position() { return _position; };
+  float Rotation() { return _rotation; };
+  sf::Vector2f Scale() { return _scale; };
 
   Entity* Parent() { return parent; };
   int GlobalID() { return globalID; };
@@ -43,30 +43,21 @@ public:
 
   Entity* GetChild(unsigned int i);
 
-  sf::Vector2f Point1,Point2;
-  sf::Color Colour;
-
   sf::Sprite sprite;
-
-  sf::Vector2f globalPos;
-  sf::Vector2f globalScale;
-  float globalRot;
-
-  sf::Vector2f localPos;
-  sf::Vector2f localScale;
-  float localRot;
 
 private:
 
-  virtual void draw(sf::RenderTarget& target,sf::RenderStates states)const;
+  void draw(sf::RenderTarget& target, sf::Transform parentTransform)const;
+  virtual void onDraw(sf::RenderTarget& target, const sf::Transform& transform) const;
 
   sf::Texture _texture;
 
   sf::Color _color;
 
-  glm::vec3 _position;
-  glm::vec3 _scale;
-  glm::vec3 _rotation;
+  sf::Vector2f _position;
+  sf::Vector2f _scale;
+  float _rotation;
+  sf::Transform _transform;
 
   std::vector<Entity*> children;
 

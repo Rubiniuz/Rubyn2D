@@ -2,21 +2,17 @@
 
 int Entity::nextGlobalID = 0;
 
-Entity::Entity() : sf::Drawable(), sf::Transformable()
+Entity::Entity() : sf::Transformable()
 {
   globalID = nextGlobalID;
   nextGlobalID++;
 
   parent = nullptr;
 
-  globalPos = sf::Vector2f(0.0f,0.0f);
-  localPos = sf::Vector2f(0.0f,0.0f);
-
-  globalScale = sf::Vector2f(1.0f,1.0f);
-  localScale = sf::Vector2f(1.0f,1.0f);
-
-  globalRot = 0.0f;
-  localRot = 0.0f;
+  _position = sf::Vector2f(0.0f,0.0f);
+  _scale = sf::Vector2f(1.0f,1.0f);
+  _rotation = 0.0f;
+  _transform = sf::Transform::Identity;
 }
 
 Entity::~Entity()
@@ -26,12 +22,14 @@ Entity::~Entity()
 
 void Entity::SetPosition(sf::Vector2f position)
 {
-  /*
+
   // position
-  sprite.setPosition(position); // absolute position
-  sprite.move(0.0f,0.0f); // offset relative to the current position
-  */
-  localPos = position;
+  //sprite.setPosition(position); // absolute position
+  //sprite.move(0.0f,0.0f); // offset relative to the current position
+  _transform.translate(-_position);
+  _position = position;
+  _transform.translate(_position);
+  /*localPos = position;
   globalPos = localPos;
   sprite.setPosition(localPos);
   if (parent != nullptr)
@@ -44,24 +42,29 @@ void Entity::SetPosition(sf::Vector2f position)
   std::vector<Entity*>::iterator child;
 	for (child = children.begin(); child != children.end(); child++) {
 		(*child)->SetPosition((*child)->localPos);
-	}
+	}*/
 }
 
 void Entity::SetRotation(float rotation)
 {
   // rotation
-  sprite.setRotation(rotation); // absolute angle
-  sprite.rotate(rotation / 6); // offset relative to the current angle
+  //sprite.setRotation(rotation); // absolute angle
+  //sprite.rotate(rotation / 6); // offset relative to the current angle
+  _transform.rotate(-_rotation);
+  _rotation = rotation;
+  _transform.rotate(_rotation);
 }
 
 void Entity::SetScale(sf::Vector2f scaling)
 {
-  /*
+
   // scale
-  sprite.setScale(scaling); // absolute scale factor
-  sprite.scale(sf::Vector2f(1.5f, 3.f)); // factor relative to the current scale
-  */
-  localScale = scaling;
+  //sprite.setScale(scaling); // absolute scale factor
+  //sprite.scale(sf::Vector2f(1.5f, 3.f)); // factor relative to the current scale
+  _transform.scale(-_scale);
+  _scale = scaling;
+  _transform.scale(_scale);
+  /*localScale = scaling;
   globalScale = localScale;
   sprite.setScale(localScale);
   if (parent != nullptr)
@@ -74,7 +77,7 @@ void Entity::SetScale(sf::Vector2f scaling)
   std::vector<Entity*>::iterator child;
 	for (child = children.begin(); child != children.end(); child++) {
 		(*child)->SetScale((*child)->localScale);
-	}
+	}*/
 }
 
 void Entity::AddChild(Entity* child)
@@ -129,7 +132,17 @@ void Entity::Init()
   sprite.setColor(_color);
 }
 
-void Entity::draw(sf::RenderTarget& target,sf::RenderStates states)const
+void Entity::draw(sf::RenderTarget& target,sf::Transform parentTransform)const
 {
-  target.draw(sprite, states);
+  sf::Transform combinedTransform = parentTransform * _transform;
+
+  onDraw(target, combinedTransform);
+
+  for (std::size_t i = 0; i < children.size(); ++i)
+    children[i]->draw(target, combinedTransform);
+}
+
+void Entity::onDraw(sf::RenderTarget& target, const sf::Transform& transform) const
+{
+  target.draw(sprite, transform);
 }
