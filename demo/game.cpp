@@ -21,11 +21,10 @@ Game::Game() : Scene()
     ent2.Init();
     ent2.SetColor(80,146,222,255);
     ent2.SetPosition(sf::Vector2f(50.0f,50.0f));
-    ent2.SetScale(sf::Vector2f(2.0f,2.0f));
+    ent2.SetScale(sf::Vector2f(1.0f,1.0f));
 
     ent.AddChild(&ent2);
 
-    ent.SetScale(sf::Vector2f(2.0f,2.0f));
 }
 
 Game::~Game()
@@ -40,19 +39,19 @@ void Game::Update(sf::Event event)
     case sf::Event::KeyPressed:
       if (event.key.code == sf::Keyboard::D)
       {
-        playerpos.x += 5;
+        playerpos.y += 5;
       }
       if (event.key.code == sf::Keyboard::A)
       {
-        playerpos.x -= 5;
+        playerpos.y -= 5;
       }
       if (event.key.code == sf::Keyboard::W)
       {
-        playerpos.y -= 2.5f;
+        playerpos.x += 2.5f;
       }
       if (event.key.code == sf::Keyboard::S)
       {
-        playerpos.y += 2.5f;
+        playerpos.x -= 2.5f;
       }
       break;
     default:
@@ -61,4 +60,5 @@ void Game::Update(sf::Event event)
   rotation += 0.005f;
   ent.SetRotation(rotation);
   ent.SetPosition(playerpos);
+  ent2.SetRotation(-rotation * 2);
 }
