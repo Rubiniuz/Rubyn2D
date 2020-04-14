@@ -7,9 +7,6 @@
 int main()
 {
   //Network* network = new Network();
-  std::string inputString;
-
-  sf::IpAddress ip = sf::IpAddress::getLocalAddress();
 
   char connectionType;
 
@@ -25,8 +22,6 @@ int main()
   else if (connectionType == 'c')
   {
     Client client;
-    client.serverIp = ip;
-    client.serverPort = 2000;
     client.Start();
     client.Run();
   }

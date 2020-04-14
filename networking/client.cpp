@@ -16,7 +16,12 @@ void Client::Start()
   std::cout << "Set Server Ip: ";
   std::cin >> serverString;
 
-  std::cout << "Set port number: ";
+  std::string portString;
+  std::cout << "Set Server Port: ";
+  std::cin >> portString;
+  serverPort = std::stoi(portString);
+
+  std::cout << "Set local port: ";
   std::cin >> port;
 
   socket.bind(port);
