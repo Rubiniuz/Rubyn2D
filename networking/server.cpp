@@ -42,6 +42,10 @@ void Server::Run()
   while(isRunning)
   {
     std::getline(std::cin, text);
+    if (text == "stop server")
+    {
+      isRunning = false;
+    }
     std::map<unsigned short, sf::IpAddress>::iterator tempIterator;
     for(tempIterator = computerID.begin(); tempIterator != computerID.end(); tempIterator++)
       socket.send(text.c_str(), text.length() + 1, tempIterator->second, tempIterator->first);

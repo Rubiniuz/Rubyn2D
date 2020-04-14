@@ -41,8 +41,13 @@ void Client::Run()
     socket.receive(buffer, sizeof(buffer), received , tempIp, tempPort);
     if (received > 0)
     {
+      std::string message = buffer;
       std::cout << "From Ip: " << tempIp << " On port: " << tempPort << std::endl;
-      std::cout << "Received: " << buffer << std::endl;
+      std::cout << "Received: " << message << std::endl;
+      if (message == "stop server")
+      {
+        isRunning = false;
+      }
     }
   }
 }
