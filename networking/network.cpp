@@ -5,61 +5,54 @@ using namespace std;
 Network::Network()
 {
   std::cout << "Enter (s) for Server, Enter (c) for Client." << std::endl;
-  cin >> connectionType;
+  std::cin >> connectionType;
 
   std::cout << "Set port number: ";
-  cin >> port;
+  std::cin >> port;
 
   socket.bind(port);
 
   if (connectionType == 's')
   {
-    char answer = 'b';
+    std::cout << "Set max number of players: ";
+    std::cin >> playersString;
+    maxPlayers = std::stoi(playersString);
+
+    int players = 0;
+
     do {
       sf::IpAddress rIp;
-      unsigned short rPort;
-      socket.receive(buffer, sizeof(buffer), received, rIp, rPort);
+      unsigned short port;
+      socket.receive(buffer, sizeof(buffer), received, rIp, port);
       if (received > 0)
-        computerID[rPort] = rIp;
-      cin >> answer;
-    } while(answer != 'a');
-
-    /*listener.listen(2000);
-    listener.accept(socket);
-    text += "Server";
-    mode = 's';*/
+      {
+        computerID[port] = rIp;
+        std::cout << "Received connection from Ip: " << rIp << " Running Port: " << port << std::endl;
+        players++;
+      }
+    } while(players != maxPlayers);
   }
-  else //if (connectionType == 'c')
+  else
   {
-    std::string sIP;
-    std::cout << "Enter server ip: ";
-    std::cin >> sIP;
+    sf::IpAddress sIP = sf::IpAddress::getLocalAddress();
     sf::IpAddress sendIP(sIP);
+    std::cout << "Got IP:" << sendIP << std::endl;
     socket.send(text.c_str(), text.length() + 1, sendIP, 2000);
-    /*
-    socket.connect(ip, 2000);
-    text += "Client";
-    mode = 'r';*/
+    std::cout << "send the IP" << std::endl;
   }
 
-  /*socket.send(text.c_str(), text.length() + 1);
+  bool done = false;
 
-  socket.receive(buffer, sizeof(buffer), received);
-
-  std::cout << buffer << std::endl;
-  */
   while(!done)
   {
     if (connectionType == 's')
     {
-      std::getline(cin, text);
+      std::getline(std::cin, text);
       std::map<unsigned short, sf::IpAddress>::iterator tempIterator;
       for(tempIterator = computerID.begin(); tempIterator != computerID.end(); tempIterator++)
         socket.send(text.c_str(), text.length() + 1, tempIterator->second, tempIterator->first);
-      /*socket.send(text.c_str(), text.length() + 1);
-      mode = 'r';*/
     }
-    else //if(mode == 'r')
+    else
     {
       sf::IpAddress tempIp;
       unsigned short tempPort;
@@ -67,7 +60,6 @@ Network::Network()
       if (received > 0)
       {
         std::cout << "Received: " << buffer << std::endl;
-        //mode = 's';
       }
     }
   }

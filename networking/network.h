@@ -6,6 +6,7 @@
 #include<SFML/Network.hpp>
 #include<string>
 #include<iostream>
+#include<map>
 
 class Network
 {
@@ -23,9 +24,8 @@ public:
 
   unsigned short port;
 
-  sf::TcpListener listener;
-
-  bool done = false;
+  int maxPlayers;
+  std::string playersString;
 
 private:
 
