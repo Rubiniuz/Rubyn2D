@@ -14,8 +14,12 @@ public:
 
   void Run();
 
-  sf::TcpSocket socket;
+  sf::UdpSocket socket;
   sf::IpAddress serverIp;
+  std::string serverString;
+
+  unsigned short port;
+  unsigned short serverPort;
 
   char buffer[2000];
   std::size_t received;
@@ -23,8 +27,6 @@ public:
   bool isRunning = true;
 
   std::string text = "Connected to: Server";
-
-  char mode;
 
 };
 

@@ -2,9 +2,11 @@
 
 #include "server.h"
 #include "client.h"
+//#include "network.h"
 
 int main()
 {
+  //Network* network = new Network();
   std::string inputString;
 
   sf::IpAddress ip = sf::IpAddress::getLocalAddress();
@@ -17,7 +19,6 @@ int main()
   if (connectionType == 's')
   {
     Server server;
-    server.mode = 's';
     server.Start();
     server.Run();
   }
@@ -25,7 +26,7 @@ int main()
   {
     Client client;
     client.serverIp = ip;
-    client.mode = 'r';
+    client.serverPort = 2000;
     client.Start();
     client.Run();
   }
