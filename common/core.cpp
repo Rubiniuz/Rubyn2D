@@ -15,7 +15,7 @@ void Core::CreateWindow()
   currentMode = sf::VideoMode::getDesktopMode();
   std::cout << "Got current mode" << '\n';
 
-  window.create(currentMode, "Tutorial", sf::Style::Fullscreen);
+  window.create(currentMode, "Tutorial");
   std::cout << "Window created" << '\n';
 
   isRunning = true;
