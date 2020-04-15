@@ -15,13 +15,18 @@ public:
 
   void Run();
 
-  sf::UdpSocket socket;
+  sf::UdpSocket Usocket;
+  sf::TcpSocket Tsocket;
+  sf::TcpListener listener;
   std::map<unsigned short, sf::IpAddress> computerID;
 
   char buffer[2000];
   std::size_t received;
 
   unsigned short port;
+
+  char mode;
+  char tcpStatus;
 
   bool isRunning = true;
 
