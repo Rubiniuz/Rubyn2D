@@ -72,6 +72,10 @@ add_library(common # ar rcs libcommon.a
 	common/scene.cpp
 	common/entity.h
 	common/entity.cpp
+	common/client.h
+	common/client.cpp
+	common/server.h
+	common/server.cpp
 )
 
 # Demo
