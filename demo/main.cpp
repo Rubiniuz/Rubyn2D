@@ -3,11 +3,13 @@
 
 int main()
 {
+  Game* game = new Game();
+
   Core core;
 
   core.CreateWindow();
 
-  Game* game = new Game();
+  game->Initialize();
 
   core.AddScene("Game", game);
 

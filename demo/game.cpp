@@ -8,28 +8,34 @@ Entity ent2;
 
 Game::Game() : Scene()
 {
-    ent.LoadFromFile("assets/cool-arrow.png");
-    ent.Init();
-    ent.SetColor(80,146,222,255);
-    ent.SetPosition(playerpos);
-    ent.SetScale(sf::Vector2f(2.0f,2.0f));
-    ent.SetRotation(rotation);
-
-    layers[1]->AddChild(&ent);
-
-    ent2.LoadFromFile("assets/cool-arrow.png");
-    ent2.Init();
-    ent2.SetColor(80,146,222,255);
-    ent2.SetPosition(sf::Vector2f(50.0f,50.0f));
-    ent2.SetScale(sf::Vector2f(1.0f,1.0f));
-
-    ent.AddChild(&ent2);
-
+  client.Start();
 }
 
 Game::~Game()
 {
 
+}
+
+void Game::Initialize()
+{
+  ent.LoadFromFile("assets/cool-arrow.png");
+  ent.Init();
+  ent.SetColor(80,146,222,255);
+  ent.SetPosition(playerpos);
+  ent.SetScale(sf::Vector2f(1.0f,1.0f));
+  ent.SetRotation(rotation);
+
+  layers[1]->AddChild(&ent);
+
+  prevPosition = ent.getPosition();
+
+  ent2.LoadFromFile("assets/cool-arrow.png");
+  ent2.Init();
+  ent2.SetColor(80,146,222,255);
+  ent2.SetPosition(sf::Vector2f(50.0f,50.0f));
+  ent2.SetScale(sf::Vector2f(1.0f,1.0f));
+
+  layers[2]->AddChild(&ent2);
 }
 
 void Game::Update(sf::Event event)
@@ -57,8 +63,22 @@ void Game::Update(sf::Event event)
     default:
       break;
   }
-  rotation += 0.005f;
-  ent.SetRotation(rotation);
   ent.SetPosition(playerpos);
-  ent2.SetRotation(-rotation * 2);
+  if (updatenumber >= 50)
+  {
+    if (prevPosition != ent.getPosition())
+    {
+      client.packet << ent.getPosition().x << ent.getPosition().y;
+      prevPosition = ent.getPosition();
+      client.SendTCPPacket(client.packet);
+    }
+    client.ReceiveTCPPacket(client.serverPacket);
+    sf::Vector2f p2Pos;
+    if(client.serverPacket >> p2Pos.x >> p2Pos.y)
+    {
+      ent2.SetPosition(p2Pos);
+    }
+    updatenumber = 0;
+  }
+  updatenumber++;
 }
