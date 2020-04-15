@@ -89,6 +89,16 @@ target_link_libraries(demo # g++ -lcommon
 	${ALL_GRAPHICS_LIBS}
 )
 
+# Server
+add_executable(server # g++ server/main.cpp -o server
+	server/main.cpp
+)
+
+target_link_libraries(server # g++ -lcommon
+	common
+	${ALL_GRAPHICS_LIBS}
+)
+
 # Networking
 add_executable(networking # g++ networking/main.cpp -o networking
 	networking/main.cpp
