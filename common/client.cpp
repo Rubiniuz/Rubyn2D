@@ -27,13 +27,17 @@ void Client::Start()
   std::cout << "Set local port: ";
   std::cin >> port;
 
+  std::cout << "Set client name: ";
+  std::cin >> clientName;
+
   sf::IpAddress sIP(serverString);
   sf::IpAddress serverIp(sIP);
 
   if (mode == 'u')
   {
     Usocket.bind(port);
-    Usocket.send(text.c_str(), text.length() + 1, serverIp, serverPort);
+    Usocket.send(clientName.c_str(), clientName.length() + 1, serverIp, serverPort);
+    //Connect(serverString, serverPort, port, clientName);
   }
   if (mode == 't')
   {
@@ -70,7 +74,7 @@ void Client::Run()
     }
     if (mode == 't')
     {
-      if (tcpStatus == 's')
+      /*if (tcpStatus == 's')
       {
         std::getline(std::cin, text);
         Tsocket.send(text.c_str(), text.length() + 1);
@@ -84,12 +88,12 @@ void Client::Run()
           std::cout << "Received: " << buffer << std::endl;
           tcpStatus = 's';
         }
-      }
+      }*/
     }
   }
 }
 
-void Client::Connect(std::string ip, int externalPort, int localPort)
+void Client::Connect(std::string ip, int externalPort, int localPort, std::string id)
 {
   serverString = ip;
   serverPort = externalPort;
@@ -100,7 +104,8 @@ void Client::Connect(std::string ip, int externalPort, int localPort)
   sf::IpAddress sIP(serverString);
   sf::IpAddress serverIp(sIP);
   std::cout << "Got IP: " << serverIp << std::endl;
-  Usocket.send(text.c_str(), text.length() + 1, serverIp, serverPort);
+  serverPacket << id << serverString << port;
+  SendUDPPacket(serverPacket);
 }
 
 void Client::SendUDPPacket(sf::Packet _packet)

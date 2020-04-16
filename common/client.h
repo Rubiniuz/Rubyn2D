@@ -14,7 +14,7 @@ public:
 
   void Run();
 
-  void Connect(std::string ip, int externalPort, int localPort);
+  void Connect(std::string ip, int externalPort, int localPort, std::string id);
 
   void SendUDPPacket(sf::Packet _packet);
   void ReceiveUDPPacket(sf::Packet _packet);
@@ -29,6 +29,7 @@ public:
   sf::TcpSocket Tsocket;
   sf::IpAddress serverIp;
   std::string serverString;
+  std::string clientName;
 
   sf::Packet packet;
   sf::Packet serverPacket;
