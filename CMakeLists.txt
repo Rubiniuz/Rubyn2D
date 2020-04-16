@@ -76,6 +76,8 @@ add_library(common # ar rcs libcommon.a
 	common/client.cpp
 	common/server.h
 	common/server.cpp
+	common/serverclient.h
+	common/serverclient.cpp
 )
 
 # Demo
