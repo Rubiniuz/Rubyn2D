@@ -66,18 +66,7 @@ void Game::Update(sf::Event event)
   ent.SetPosition(playerpos);
   if (updatenumber >= 50)
   {
-    if (prevPosition != ent.getPosition())
-    {
-      client.packet << ent.getPosition().x << ent.getPosition().y;
-      prevPosition = ent.getPosition();
-      client.SendTCPPacket(client.packet);
-    }
-    client.ReceiveTCPPacket(client.serverPacket);
-    sf::Vector2f p2Pos;
-    if(client.serverPacket >> p2Pos.x >> p2Pos.y)
-    {
-      ent2.SetPosition(p2Pos);
-    }
+    client.Run();
     updatenumber = 0;
   }
   updatenumber++;

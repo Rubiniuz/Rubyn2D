@@ -72,8 +72,15 @@ void Server::Run()
       {
         isRunning = false;
       }
-      for(int c = clients.size(); c >= 0; c--)
-        SendUDPPacket(clients[c]);
+      for(auto &c : clients)
+      {
+        std::cout << "for client id: " << c->clientId << " add client name to client packet." << std::endl;
+        c->clientPacket << c->clientName;
+        std::cout << "finished packing data sending to client!" << std::endl;
+        SendUDPPacket(c);
+        std::cout << "send data to client!" << std::endl;
+      }
+
     }
 
     if (mode == 't')

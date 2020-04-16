@@ -9,7 +9,7 @@ int main()
 
   core.CreateWindow();
 
-  game->Initialize();
+  //game->Initialize();
 
   core.AddScene("Game", game);
 

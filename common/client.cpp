@@ -58,7 +58,7 @@ void Client::Run()
   {
     if (mode == 'u')
     {
-      sf::IpAddress tempIp;
+      /*sf::IpAddress tempIp;
       unsigned short tempPort;
       Usocket.receive(buffer, sizeof(buffer), received , tempIp, tempPort);
       if (received > 0)
@@ -70,7 +70,11 @@ void Client::Run()
         {
           isRunning = false;
         }
-      }
+      }*/
+      ReceiveUDPPacket(packet);
+      std::string servermessage;
+      packet >> servermessage;
+      std::cout << "got this from server: " << servermessage << std::endl;
     }
     if (mode == 't')
     {
