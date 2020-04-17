@@ -80,7 +80,14 @@ void Server::Run()
         SendUDPPacket(c);
         std::cout << "send data to client!" << std::endl;
       }
+        std::string message = "stop server";
+        for(auto &c : clients)
+        {
+          StringToData(c, message);
 
+          SendUDPPacket(c);
+          ReceiveUDPPacket(c);
+        }
     }
 
     if (mode == 't')

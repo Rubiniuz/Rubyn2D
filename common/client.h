@@ -2,6 +2,7 @@
 #define CLIENT_H
 
 #include <SFML/Network.hpp>
+#include <string.h>
 
 class Client
 {
@@ -14,13 +15,13 @@ public:
 
   void Run();
 
-  void Connect(std::string ip, int externalPort, int localPort, std::string id);
-
-  void SendUDPPacket(sf::Packet _packet);
-  void ReceiveUDPPacket(sf::Packet _packet);
+  void SendUDPPacket();
+  void ReceiveUDPPacket();
 
   void SendTCPPacket(sf::Packet _packet);
   void ReceiveTCPPacket(sf::Packet _packet);
+
+  void StringToData(std::string message);
 
   char mode;
   char tcpStatus;
@@ -33,6 +34,8 @@ public:
 
   sf::Packet packet;
   sf::Packet serverPacket;
+  char serverData[50];
+  char clientData[50];
 
   unsigned short port;
   unsigned short serverPort;

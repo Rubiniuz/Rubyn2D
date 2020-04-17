@@ -16,6 +16,8 @@ public:
   std::string clientName;
   int clientId;
   sf::Packet clientPacket;
+  char clientData[50];
+  char serverData[50];
 
 };
 

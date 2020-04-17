@@ -75,10 +75,13 @@ void Client::Run()
       std::string servermessage;
       packet >> servermessage;
       std::cout << "got this from server: " << servermessage << std::endl;
+        ReceiveUDPPacket();
+        StringToData("Dont Stop");
+        SendUDPPacket();
     }
     if (mode == 't')
     {
-      /*if (tcpStatus == 's')
+      if (tcpStatus == 's')
       {
         std::getline(std::cin, text);
         Tsocket.send(text.c_str(), text.length() + 1);
@@ -92,35 +95,37 @@ void Client::Run()
           std::cout << "Received: " << buffer << std::endl;
           tcpStatus = 's';
         }
-      }*/
+      }
     }
   }
 }
 
-void Client::Connect(std::string ip, int externalPort, int localPort, std::string id)
+void Client::StringToData(std::string message)
 {
-  serverString = ip;
-  serverPort = externalPort;
-  port = localPort;
-
-  Usocket.bind(port);
-
-  sf::IpAddress sIP(serverString);
-  sf::IpAddress serverIp(sIP);
-  std::cout << "Got IP: " << serverIp << std::endl;
-  serverPacket << id << serverString << port;
-  SendUDPPacket(serverPacket);
+  strncpy(clientData, message.c_str(), sizeof(clientData));
+  clientData[sizeof(clientData)-1] = '\0';
 }
 
-void Client::SendUDPPacket(sf::Packet _packet)
+void Client::SendUDPPacket()
 {
-  Usocket.send(_packet.getData(), _packet.getDataSize(), serverIp, serverPort);
-  _packet.clear();
+  if(Usocket.send(clientData, sizeof(clientData), serverIp, serverPort) == sf::Socket::Done)
+  {
+    std::cout << "succesfully send all data." << std::endl;
+  }
 }
 
-void Client::ReceiveUDPPacket(sf::Packet _packet)
+void Client::ReceiveUDPPacket()
 {
-  Usocket.receive(_packet, serverIp, serverPort);
+  std::size_t received;
+
+  if(Usocket.receive(serverData, sizeof(serverData), received , serverIp, serverPort) == sf::Socket::Done)
+  {
+    if (received > 0)
+    {
+      //serverData = buffer;
+      std::cout << "Received: " << serverData << std::endl;
+    }
+  }
 }
 
 void Client::SendTCPPacket(sf::Packet _packet)

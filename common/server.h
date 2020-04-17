@@ -4,6 +4,7 @@
 #include <SFML/Network.hpp>
 #include <map>
 #include <common/serverclient.h>
+#include <string.h>
 
 class Server
 {
@@ -18,6 +19,8 @@ public:
 
   void SendUDPPacket(ServerClient* client);
   void ReceiveUDPPacket(ServerClient* client);
+
+  void StringToData(ServerClient* client, std::string message);
   /*
   void SendTCPPacket(sf::Packet _packet);
   void ReceiveTCPPacket(sf::Packet _packet);
