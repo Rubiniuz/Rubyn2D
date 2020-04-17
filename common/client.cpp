@@ -54,30 +54,24 @@ void Client::Run()
 {
   isRunning = true;
   std::cout << "Starting loop " << isRunning << std::endl;
+
+  sf::Clock dtClock;
+  float dt;
+
   while(isRunning)
   {
+    dt = dtClock.getElapsedTime().asSeconds();
     if (mode == 'u')
     {
-      /*sf::IpAddress tempIp;
-      unsigned short tempPort;
-      Usocket.receive(buffer, sizeof(buffer), received , tempIp, tempPort);
-      if (received > 0)
+      if (dt >= 2)
       {
-        std::string message = buffer;
-        std::cout << "From Ip: " << tempIp << " On port: " << tempPort << std::endl;
-        std::cout << "Received: " << message << std::endl;
-        if (message == "stop server")
-        {
-          isRunning = false;
-        }
-      }*/
-      ReceiveUDPPacket(packet);
-      std::string servermessage;
-      packet >> servermessage;
-      std::cout << "got this from server: " << servermessage << std::endl;
+        printf("\033c");
+        std::cout << "\x1B[2J\x1B[H";
+        dt = dtClock.restart().asSeconds();
         ReceiveUDPPacket();
         StringToData("Dont Stop");
         SendUDPPacket();
+      }
     }
     if (mode == 't')
     {

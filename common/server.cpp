@@ -63,23 +63,20 @@ void Server::Run()
 {
   isRunning = true;
   std::cout << "Starting loop " << isRunning << std::endl;
+
+  sf::Clock dtClock;
+  float dt;
+
   while(isRunning)
   {
+    dt = dtClock.getElapsedTime().asSeconds();
     if (mode == 'u')
     {
-      std::getline(std::cin, text);
-      if (text == "stop server")
+      if (dt >= 2)
       {
-        isRunning = false;
-      }
-      for(auto &c : clients)
-      {
-        std::cout << "for client id: " << c->clientId << " add client name to client packet." << std::endl;
-        c->clientPacket << c->clientName;
-        std::cout << "finished packing data sending to client!" << std::endl;
-        SendUDPPacket(c);
-        std::cout << "send data to client!" << std::endl;
-      }
+        printf("\033c");
+        std::cout << "\x1B[2J\x1B[H";
+        dt = dtClock.restart().asSeconds();
         std::string message = "stop server";
         for(auto &c : clients)
         {
@@ -88,6 +85,7 @@ void Server::Run()
           SendUDPPacket(c);
           ReceiveUDPPacket(c);
         }
+      }
     }
 
     if (mode == 't')
@@ -112,15 +110,31 @@ void Server::Run()
   }
 }
 
+void Server::StringToData(ServerClient* c, std::string message)
+{
+  strncpy(c->serverData, message.c_str(), sizeof(c->serverData));
+  c->serverData[sizeof(c->serverData)-1] = '\0';
+}
+
 void Server::SendUDPPacket(ServerClient* client)
 {
-  Usocket.send(client->clientPacket.getData(), client->clientPacket.getDataSize(), client->clientIp, client->clientPort);
-  client->clientPacket.clear();
+  if(Usocket.send(client->serverData, sizeof(client->serverData), client->clientIp, client->clientPort) == sf::Socket::Done)
+  {
+    std::cout << "succesfully send all data: " << client->serverData << std::endl;
+  }
 }
 
 void Server::ReceiveUDPPacket(ServerClient* client)
 {
-  Usocket.receive(client->clientPacket, client->clientIp, client->clientPort);
+  std::size_t received;
+  if(Usocket.receive(client->clientData, sizeof(client->clientData), received , client->clientIp, client->clientPort) == sf::Socket::Done)
+  {
+    if (received > 0)
+    {
+      //client->clientData = buffer;
+      std::cout << "Received: " << client->clientData << std::endl;
+    }
+  }
 }
 /*
 void Server::SendTCPPacket(sf::Packet _packet)
