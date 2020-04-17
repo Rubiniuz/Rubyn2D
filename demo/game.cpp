@@ -40,6 +40,7 @@ void Game::Initialize()
 
 void Game::Update(sf::Event event)
 {
+  ClientUpdate();
   switch(event.type)
   {
     case sf::Event::KeyPressed:
@@ -64,10 +65,10 @@ void Game::Update(sf::Event event)
       break;
   }
   ent.SetPosition(playerpos);
-  if (updatenumber >= 50)
-  {
-    client.Run();
-    updatenumber = 0;
-  }
-  updatenumber++;
+
+}
+
+void Game::ClientUpdate()
+{
+  client.Run();
 }

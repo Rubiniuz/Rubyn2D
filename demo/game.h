@@ -23,6 +23,8 @@ public:
 
   virtual void Update(sf::Event event);
 
+  void ClientUpdate();
+
 private:
 
 };
