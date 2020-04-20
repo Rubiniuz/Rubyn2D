@@ -124,6 +124,17 @@ void Server::SendUDPPacket(ServerClient* client)
   }
 }
 
+void Server::SendUDPPacketToAll(char data[50])
+{
+  for(auto &client : clients)
+  {
+    if(Usocket.send(data, 50, client->clientIp, client->clientPort) == sf::Socket::Done)
+    {
+      std::cout << "succesfully send all data to client with id: " << client->clientId << std::endl;
+    }
+  }
+}
+
 void Server::ReceiveUDPPacket(ServerClient* client)
 {
   std::size_t received;

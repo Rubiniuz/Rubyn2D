@@ -20,6 +20,8 @@ public:
   void SendUDPPacket(ServerClient* client);
   void ReceiveUDPPacket(ServerClient* client);
 
+  void SendUDPPacketToAll(char data[50]);
+
   void StringToData(ServerClient* client, std::string message);
   /*
   void SendTCPPacket(sf::Packet _packet);
