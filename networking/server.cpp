@@ -24,6 +24,7 @@ void Server::Start()
   maxPlayers = std::stoi(playersString);
 
   connectedPlayers = 0;
+  currentClientId = 0;
 
   if (mode == 'u')
   {
@@ -35,7 +36,14 @@ void Server::Start()
       if (received > 0)
       {
         computerID[port] = rIp;
-        std::cout << "Received connection from Ip: " << rIp << " Running Port: " << port << std::endl;
+        std::cout << "Received connection from Ip: " << rIp << " Running Port: " << port << " With clientName: " << buffer << std::endl;
+        ServerClient* client = new ServerClient();
+        client->clientIp = rIp;
+        client->clientPort = port;
+        client->clientName = buffer;
+        client->clientId = currentClientId;
+        clients.push_back(client);
+        currentClientId++;
         connectedPlayers++;
       }
     } while(connectedPlayers != maxPlayers);
@@ -55,18 +63,29 @@ void Server::Run()
 {
   isRunning = true;
   std::cout << "Starting loop " << isRunning << std::endl;
+
+  sf::Clock dtClock;
+  float dt;
+
   while(isRunning)
   {
+    dt = dtClock.getElapsedTime().asSeconds();
     if (mode == 'u')
     {
-      std::getline(std::cin, text);
-      if (text == "stop server")
+      if (dt >= 2)
       {
-        isRunning = false;
+        printf("\033c");
+        std::cout << "\x1B[2J\x1B[H";
+        dt = dtClock.restart().asSeconds();
+        std::string message = "stop server";
+        for(auto &c : clients)
+        {
+          StringToData(c, message);
+
+          SendUDPPacket(c);
+          ReceiveUDPPacket(c);
+        }
       }
-      std::map<unsigned short, sf::IpAddress>::iterator tempIterator;
-      for(tempIterator = computerID.begin(); tempIterator != computerID.end(); tempIterator++)
-        Usocket.send(text.c_str(), text.length() + 1, tempIterator->second, tempIterator->first);
     }
 
     if (mode == 't')
@@ -90,3 +109,53 @@ void Server::Run()
 
   }
 }
+
+void Server::StringToData(ServerClient* c, std::string message)
+{
+  strncpy(c->serverData, message.c_str(), sizeof(c->serverData));
+  c->serverData[sizeof(c->serverData)-1] = '\0';
+}
+
+void Server::SendUDPPacket(ServerClient* client)
+{
+  if(Usocket.send(client->serverData, sizeof(client->serverData), client->clientIp, client->clientPort) == sf::Socket::Done)
+  {
+    std::cout << "succesfully send all data: " << client->serverData << std::endl;
+  }
+}
+
+void Server::SendUDPPacketToAll(char data[50])
+{
+  for(auto &client : clients)
+  {
+    if(Usocket.send(data, 50, client->clientIp, client->clientPort) == sf::Socket::Done)
+    {
+      std::cout << "succesfully send all data to client with id: " << client->clientId << std::endl;
+    }
+  }
+}
+
+void Server::ReceiveUDPPacket(ServerClient* client)
+{
+  std::size_t received;
+  if(Usocket.receive(client->clientData, sizeof(client->clientData), received , client->clientIp, client->clientPort) == sf::Socket::Done)
+  {
+    if (received > 0)
+    {
+      //client->clientData = buffer;
+      std::cout << "Received: " << client->clientData << std::endl;
+    }
+  }
+}
+/*
+void Server::SendTCPPacket(sf::Packet _packet)
+{
+  Tsocket.send(_packet);
+  _packet.clear();
+}
+
+void Server::ReceiveTCPPacket(sf::Packet _packet)
+{
+  Tsocket.receive(_packet);
+}
+*/

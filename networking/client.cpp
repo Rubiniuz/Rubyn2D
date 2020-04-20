@@ -27,13 +27,17 @@ void Client::Start()
   std::cout << "Set local port: ";
   std::cin >> port;
 
+  std::cout << "Set client name: ";
+  std::cin >> clientName;
+
   sf::IpAddress sIP(serverString);
   sf::IpAddress serverIp(sIP);
 
   if (mode == 'u')
   {
     Usocket.bind(port);
-    Usocket.send(text.c_str(), text.length() + 1, serverIp, serverPort);
+    Usocket.send(clientName.c_str(), clientName.length() + 1, serverIp, serverPort);
+    //Connect(serverString, serverPort, port, clientName);
   }
   if (mode == 't')
   {
@@ -50,22 +54,23 @@ void Client::Run()
 {
   isRunning = true;
   std::cout << "Starting loop " << isRunning << std::endl;
+
+  sf::Clock dtClock;
+  float dt;
+
   while(isRunning)
   {
+    dt = dtClock.getElapsedTime().asSeconds();
     if (mode == 'u')
     {
-      sf::IpAddress tempIp;
-      unsigned short tempPort;
-      Usocket.receive(buffer, sizeof(buffer), received , tempIp, tempPort);
-      if (received > 0)
+      if (dt >= 2)
       {
-        std::string message = buffer;
-        std::cout << "From Ip: " << tempIp << " On port: " << tempPort << std::endl;
-        std::cout << "Received: " << message << std::endl;
-        if (message == "stop server")
-        {
-          isRunning = false;
-        }
+        printf("\033c");
+        std::cout << "\x1B[2J\x1B[H";
+        dt = dtClock.restart().asSeconds();
+        ReceiveUDPPacket();
+        StringToData("Dont Stop");
+        SendUDPPacket();
       }
     }
     if (mode == 't')
@@ -89,29 +94,32 @@ void Client::Run()
   }
 }
 
-void Client::Connect(std::string ip, int externalPort, int localPort)
+void Client::StringToData(std::string message)
 {
-  serverString = ip;
-  serverPort = externalPort;
-  port = localPort;
-
-  Usocket.bind(port);
-
-  sf::IpAddress sIP(serverString);
-  sf::IpAddress serverIp(sIP);
-  std::cout << "Got IP: " << serverIp << std::endl;
-  Usocket.send(text.c_str(), text.length() + 1, serverIp, serverPort);
+  strncpy(clientData, message.c_str(), sizeof(clientData));
+  clientData[sizeof(clientData)-1] = '\0';
 }
 
-void Client::SendUDPPacket(sf::Packet _packet)
+void Client::SendUDPPacket()
 {
-  Usocket.send(_packet.getData(), _packet.getDataSize(), serverIp, serverPort);
-  _packet.clear();
+  if(Usocket.send(clientData, sizeof(clientData), serverIp, serverPort) == sf::Socket::Done)
+  {
+    std::cout << "succesfully send all data." << std::endl;
+  }
 }
 
-void Client::ReceiveUDPPacket(sf::Packet _packet)
+void Client::ReceiveUDPPacket()
 {
-  Usocket.receive(_packet, serverIp, serverPort);
+  std::size_t received;
+
+  if(Usocket.receive(serverData, sizeof(serverData), received , serverIp, serverPort) == sf::Socket::Done)
+  {
+    if (received > 0)
+    {
+      //serverData = buffer;
+      std::cout << "Received: " << serverData << std::endl;
+    }
+  }
 }
 
 void Client::SendTCPPacket(sf::Packet _packet)
