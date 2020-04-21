@@ -46,14 +46,13 @@ void Client::Start()
       if (dt >= 2)
       {
         ReceiveUDPPacket();
+        std::cout << serverData << std::endl;
+        clientId = serverData[0];
+        playerPosition = sf::Vector2f(serverData[1], serverData[2]);
+        playerRotation = serverData[3];
         a = 2;
       }
     }
-
-    std::cout << serverData << std::endl;
-    clientId = serverData[0];
-    playerPosition = sf::Vector2f(serverData[1], serverData[2]);
-    playerRotation = serverData[3];
     //Connect(serverString, serverPort, port, clientName);
   }
   if (mode == 't')
@@ -70,13 +69,13 @@ void Client::Start()
 void Client::Run()
 {
   isRunning = true;
-  std::cout << "Starting loop " << isRunning << std::endl;
+  //std::cout << "Starting loop " << isRunning << std::endl;
 
-  sf::Clock dtClock;
-  float dt;
+  //sf::Clock dtClock;
+  //float dt;
 
-  while(isRunning)
-  {
+  //while(isRunning)
+  //{
     dt = dtClock.getElapsedTime().asSeconds();
     if (mode == 'u')
     {
@@ -125,19 +124,22 @@ void Client::Run()
         }
       }
     }
-  }
+  //}
 }
 
 void Client::UpdateGame()
 {
-  if (serverData[0] == clientId)
+  std::string data = convertToString(serverData);
+  if (data[0] == clientId)
   {
+    std::cout << "updating my position" << std::endl;
     playerPosition.x = serverData[1];
     playerPosition.y = serverData[2];
     playerRotation = serverData[3];
   }
   else
   {
+    std::cout << "updating enemy position" << std::endl;
     enemyPosition.x = serverData[1];
     enemyPosition.y = serverData[2];
     enemyRotation = serverData[3];

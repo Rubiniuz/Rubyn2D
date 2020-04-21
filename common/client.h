@@ -63,6 +63,9 @@ public:
   sf::Vector2f enemyPosition;
   float enemyRotation;
 
+  sf::Clock dtClock;
+  float dt;
+
 };
 
 #endif
