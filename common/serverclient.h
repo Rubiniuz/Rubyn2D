@@ -16,7 +16,7 @@ public:
   sf::IpAddress clientIp;
   unsigned short clientPort;
   std::string clientName;
-  int clientId;
+  int clientId = 1;
   sf::Packet clientPacket;
   char clientData[50];
   char serverData[50];

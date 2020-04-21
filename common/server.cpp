@@ -32,34 +32,36 @@ void Server::Start()
     do {
       sf::IpAddress rIp;
       unsigned short port;
-      Usocket.receive(buffer, sizeof(buffer), received, rIp, port);
-      if (received > 0)
+      if (Usocket.receive(buffer, sizeof(buffer), received, rIp, port) == sf::Socket::Done)
       {
-        computerID[port] = rIp;
-        std::cout << "Received connection from Ip: " << rIp << " Running Port: " << port << " With clientName: " << buffer << std::endl;
-        ServerClient* client = new ServerClient();
-        client->clientIp = rIp;
-        client->clientPort = port;
-        client->clientName = buffer;
-        client->clientId = currentClientId;
-        clients.push_back(client);
-        client->position = sf::Vector2f(200 * currentClientId, 200 * currentClientId);
-        client->rotation = 35 * currentClientId;
-        currentClientId++;
-        connectedPlayers++;
+        if (received > 0)
+        {
+          computerID[port] = rIp;
+          std::cout << "Received connection from Ip: " << rIp << " Running Port: " << port << " With clientName: " << buffer << std::endl;
+          ServerClient* client = new ServerClient();
+          client->clientIp = rIp;
+          client->clientPort = port;
+          client->clientName = buffer;
+          client->clientId = currentClientId;
+          clients.push_back(client);
+          client->position = sf::Vector2f(200 * currentClientId, 200 * currentClientId);
+          client->rotation = 35 * currentClientId;
 
-        std::string clientId = "";
-        clientId += std::to_string(client->clientId);
-        clientId += ",";
-        clientId += std::to_string(client->position.x);
-        clientId += ",";
-        clientId += std::to_string(client->position.y);
-        clientId += ",";
-        clientId += std::to_string(client->rotation);
+          std::string toSend = "";
+          toSend += std::to_string(client->clientId);
+          toSend += ",";
+          toSend += std::to_string(client->position.x);
+          toSend += ",";
+          toSend += std::to_string(client->position.y);
+          toSend += ",";
+          toSend += std::to_string(client->rotation);
 
-        StringToData(client, clientId);
-        
-        SendUDPPacket(client);
+          StringToData(client, toSend);
+
+          SendUDPPacket(client);
+          currentClientId++;
+          connectedPlayers++;
+        }
       }
     } while(connectedPlayers != maxPlayers);
   }
@@ -92,7 +94,6 @@ void Server::Run()
         printf("\033c");
         std::cout << "\x1B[2J\x1B[H";
         dt = dtClock.restart().asSeconds();
-        std::string message = "stop server";
         for(auto &c : clients)
         {
           ReceiveUDPPacket(c);
@@ -100,9 +101,15 @@ void Server::Run()
           UpdateClient(c);
 
           std::string toSend = "";
-          toSend += c->clientId += c->position.x += c->position.y += c->rotation;
+          toSend += std::to_string(c->clientId);
+          toSend += ",";
+          toSend += std::to_string(c->position.x);
+          toSend += ",";
+          toSend += std::to_string(c->position.y);
+          toSend += ",";
+          toSend += std::to_string(c->rotation);
 
-          StringToData(c, message);
+          StringToData(c, toSend);
 
           SendUDPPacketToAll(c->serverData);
         }
