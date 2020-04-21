@@ -35,37 +35,47 @@ void Game::Initialize()
   ent2.SetPosition(sf::Vector2f(50.0f,50.0f));
   ent2.SetScale(sf::Vector2f(1.0f,1.0f));
 
-  layers[2]->AddChild(&ent2);
+  layers[1]->AddChild(&ent2);
 }
 
 void Game::Update(sf::Event event)
 {
-  ClientUpdate();
   switch(event.type)
   {
     case sf::Event::KeyPressed:
       if (event.key.code == sf::Keyboard::D)
       {
-        playerpos.y += 5;
+        client.inputs[3] = true;
+        std::cout << "D" << std::endl;
       }
       if (event.key.code == sf::Keyboard::A)
       {
-        playerpos.y -= 5;
+        client.inputs[1] = true;
+        std::cout << "A" << std::endl;
       }
       if (event.key.code == sf::Keyboard::W)
       {
-        playerpos.x += 2.5f;
+        client.inputs[0] = true;
+        std::cout << "W" << std::endl;
       }
       if (event.key.code == sf::Keyboard::S)
       {
-        playerpos.x -= 2.5f;
+        client.inputs[2] = true;
+        std::cout << "S" << std::endl;
       }
       break;
     default:
+      client.inputs[0] = false;
+      client.inputs[1] = false;
+      client.inputs[2] = false;
+      client.inputs[3] = false;
+      client.inputs[4] = false;
       break;
   }
-  ent.SetPosition(playerpos);
+  ClientUpdate();
 
+  ent.SetPosition(client.playerPosition);
+  ent2.SetPosition(client.enemyPosition);
 }
 
 void Game::ClientUpdate()
