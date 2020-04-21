@@ -108,6 +108,7 @@ void Core::CheckWindowState()
             window.close();
             currentMode = sf::VideoMode(970 , 540);
             window.create(currentMode, "Tutorial");
+            window.requestFocus();
             std::cout << "Window Mode" << '\n';
           }
           break;
