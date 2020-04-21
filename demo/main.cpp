@@ -7,13 +7,13 @@ int main()
 
   Core core;
 
-  //core.CreateWindow();
+  core.CreateWindow();
 
-  //game->Initialize();
+  game->Initialize();
 
-  //core.AddScene("Game", game);
+  core.AddScene("Game", game);
 
-  //core.Start();
+  core.Start();
 
   sf::Event event;
 
@@ -21,10 +21,9 @@ int main()
   {
     event = core.GetEventHandler();
 
-    //core.Run(event);
-    game->ClientUpdate();
+    core.Run(event);
+    //game->ClientUpdate();
   }
-
 
   return 0;
 }
