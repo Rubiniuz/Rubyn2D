@@ -37,6 +37,23 @@ void Client::Start()
   {
     Usocket.bind(port);
     Usocket.send(clientName.c_str(), clientName.length() + 1, serverIp, serverPort);
+    sf::Clock dtClock;
+    float dt;
+    int a = 1;
+    while (a == 1)
+    {
+      dt = dtClock.getElapsedTime().asSeconds();
+      if (dt >= 2)
+      {
+        ReceiveUDPPacket();
+        a = 2;
+      }
+    }
+
+    std::cout << serverData << std::endl;
+    clientId = serverData[0];
+    playerPosition = sf::Vector2f(serverData[1], serverData[2]);
+    playerRotation = serverData[3];
     //Connect(serverString, serverPort, port, clientName);
   }
   if (mode == 't')
@@ -68,9 +85,26 @@ void Client::Run()
         printf("\033c");
         std::cout << "\x1B[2J\x1B[H";
         dt = dtClock.restart().asSeconds();
-        ReceiveUDPPacket();
-        StringToData("Dont Stop");
+
+        std::string playerInput = "";
+        playerInput += std::to_string(inputs[0]);
+        playerInput += ",";
+        playerInput += std::to_string(inputs[1]);
+        playerInput += ",";
+        playerInput += std::to_string(inputs[2]);
+        playerInput += ",";
+        playerInput += std::to_string(inputs[3]);
+        playerInput += ",";
+        playerInput += std::to_string(inputs[4]);
+        playerInput += ",";
+
+        StringToData(playerInput);
+
         SendUDPPacket();
+
+        ReceiveUDPPacket();
+
+        UpdateGame();
       }
     }
     if (mode == 't')
@@ -92,6 +126,33 @@ void Client::Run()
       }
     }
   }
+}
+
+void Client::UpdateGame()
+{
+  if (serverData[0] == clientId)
+  {
+    playerPosition.x = serverData[1];
+    playerPosition.y = serverData[2];
+    playerRotation = serverData[3];
+  }
+  else
+  {
+    enemyPosition.x = serverData[1];
+    enemyPosition.y = serverData[2];
+    enemyRotation = serverData[3];
+  }
+}
+
+std::string Client::convertToString(char* a)
+{
+    std::string s = "";
+    int size = sizeof(a) / sizeof(char);
+    for (int i = 0; i < size; i++)
+    {
+      s = s + a[i];
+    }
+    return s;
 }
 
 void Client::StringToData(std::string message)

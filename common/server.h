@@ -22,7 +22,11 @@ public:
 
   void SendUDPPacketToAll(char data[50]);
 
+  std::string convertToString(char* a);
   void StringToData(ServerClient* client, std::string message);
+
+  void UpdateClient(ServerClient* c);
+
   /*
   void SendTCPPacket(sf::Packet _packet);
   void ReceiveTCPPacket(sf::Packet _packet);

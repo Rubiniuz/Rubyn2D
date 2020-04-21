@@ -23,6 +23,8 @@ public:
 
   void StringToData(std::string message);
 
+  void UpdateGame();
+
   char mode;
   char tcpStatus;
 
@@ -31,11 +33,18 @@ public:
   sf::IpAddress serverIp;
   std::string serverString;
   std::string clientName;
+  int clientId;
 
   sf::Packet packet;
   sf::Packet serverPacket;
+
   char serverData[50];
   char clientData[50];
+
+  std::string convertToString(char* a);
+
+  //std::string serverData;
+  //std::string clientData;
 
   unsigned short port;
   unsigned short serverPort;
@@ -46,6 +55,13 @@ public:
   bool isRunning = true;
 
   std::string text = "Connected to: Client";
+
+  bool inputs[5];
+
+  sf::Vector2f playerPosition;
+  float playerRotation;
+  sf::Vector2f enemyPosition;
+  float enemyRotation;
 
 };
 

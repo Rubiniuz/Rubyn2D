@@ -24,7 +24,7 @@ void Server::Start()
   maxPlayers = std::stoi(playersString);
 
   connectedPlayers = 0;
-  currentClientId = 0;
+  currentClientId = 1;
 
   if (mode == 'u')
   {
@@ -43,8 +43,23 @@ void Server::Start()
         client->clientName = buffer;
         client->clientId = currentClientId;
         clients.push_back(client);
+        client->position = sf::Vector2f(200 * currentClientId, 200 * currentClientId);
+        client->rotation = 35 * currentClientId;
         currentClientId++;
         connectedPlayers++;
+
+        std::string clientId = "";
+        clientId += std::to_string(client->clientId);
+        clientId += ",";
+        clientId += std::to_string(client->position.x);
+        clientId += ",";
+        clientId += std::to_string(client->position.y);
+        clientId += ",";
+        clientId += std::to_string(client->rotation);
+
+        StringToData(client, clientId);
+        
+        SendUDPPacket(client);
       }
     } while(connectedPlayers != maxPlayers);
   }
@@ -80,10 +95,16 @@ void Server::Run()
         std::string message = "stop server";
         for(auto &c : clients)
         {
+          ReceiveUDPPacket(c);
+
+          UpdateClient(c);
+
+          std::string toSend = "";
+          toSend += c->clientId += c->position.x += c->position.y += c->rotation;
+
           StringToData(c, message);
 
-          SendUDPPacket(c);
-          ReceiveUDPPacket(c);
+          SendUDPPacketToAll(c->serverData);
         }
       }
     }
@@ -108,6 +129,28 @@ void Server::Run()
     }
 
   }
+}
+
+void Server::UpdateClient(ServerClient* c)
+{
+  c->inputs[0] = c->clientData[0];
+  c->inputs[1] = c->clientData[1];
+  c->inputs[2] = c->clientData[2];
+  c->inputs[3] = c->clientData[3];
+  c->inputs[4] = c->clientData[4];
+
+  c->Update();
+}
+
+std::string Server::convertToString(char* a)
+{
+    std::string s = "";
+    int size = sizeof(a) / sizeof(char);
+    for (int i = 0; i < size; i++)
+    {
+      s = s + a[i];
+    }
+    return s;
 }
 
 void Server::StringToData(ServerClient* c, std::string message)
